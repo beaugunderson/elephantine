@@ -1,6 +1,6 @@
 {
   "name": "elephantine",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "a parametric l-system that primarily uses emoji as symbols",
   "main": "elephantine.js",
   "directories": {
