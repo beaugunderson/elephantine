@@ -1,6 +1,6 @@
 {
   "name": "elephantine",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "a parametric l-system that primarily uses emoji as symbols",
   "main": "elephantine.js",
   "directories": {
@@ -26,7 +26,6 @@
     "lodash": "^3.10.1",
     "onecolor": "^2.5.0",
     "parsimmon": "git+https://github.com/jneen/parsimmon.git",
-    "pegjs-import": "^0.2.6",
     "random-seed": "^0.3.0",
     "require-directory": "^2.1.1",
     "uuid": "^2.0.1"
