@@ -1,8 +1,7 @@
 'use strict';
 
 import test from 'ava';
-
-var clean = require('../lib/clean-curve.js');
+import {clean} from '..';
 
 test('clean a complicated system', t => {
   t.plan(1);

@@ -1,8 +1,8 @@
 'use strict';
 
 import test from 'ava';
+import {generate} from '..';
 
-var generate = require('../lib/generate-curve.js');
 var _ = require('lodash');
 
 test('generate some systems without dying', t => {
