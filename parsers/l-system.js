@@ -1,9 +1,11 @@
 'use strict';
 
+// var consoleFormat = require('emoji-aware').consoleFormat;
 var emoji = require('emoji-aware/parsers/emoji.js');
 var parsimmon = require('parsimmon');
 var merge = require('lodash').merge;
 var flattenDeep = require('lodash').flattenDeep;
+var _ = require('lodash');
 
 function lexeme(parser) {
   return parser.skip(parsimmon.optWhitespace);
@@ -117,6 +119,16 @@ var Curve = exports.Curve = parsimmon.seqMap(
   }
 );
 
+function parseResultToError(string, result) {
+  var errorString = [
+    'Error parsing string:',
+    string,
+    _.padLeft(`^ expected: ${result.expected.join(', ')}`, result.index)
+  ].join('\n');
+
+  return new Error(errorString);
+}
+
 exports.parseRuleBody = function (string) {
   var result = RuleBody.parse(string);
 
@@ -124,7 +136,7 @@ exports.parseRuleBody = function (string) {
     return result.value;
   }
 
-  throw new Error('Error parsing string: ' + JSON.stringify(result, null, 2));
+  throw parseResultToError(string, result);
 };
 
 exports.parse = function (string) {
@@ -134,5 +146,5 @@ exports.parse = function (string) {
     return result.value;
   }
 
-  throw new Error('Error parsing string: ' + JSON.stringify(result, null, 2));
+  throw parseResultToError(string, result);
 };
