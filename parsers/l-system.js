@@ -73,6 +73,13 @@ var Command = parsimmon.seq(
   };
 }).desc('a command');
 
+var RulePartSeparator = parsimmon.alt(
+  lexeme(parsimmon.string(';\n')),
+  lexeme(parsimmon.string(';')),
+  lexeme(parsimmon.string('\n')),
+  lexeme(parsimmon.eof)
+);
+
 var RuleInitial = Command.atLeast(1);
 
 var Rule = parsimmon.seqMap(
@@ -82,7 +89,7 @@ var Rule = parsimmon.seqMap(
     Command.atLeast(1),
     Argument.atLeast(1)
   ),
-  lexeme(parsimmon.string(';')).times(0, 1),
+  RulePartSeparator.times(1),
 
   function (commandSymbol, _, commandsOrArguments) {
     var rule = {};
@@ -102,7 +109,7 @@ var RuleBody = exports.RuleBody = Command.atLeast(0).map(function (commands) {
 
 var Curve = exports.Curve = parsimmon.seqMap(
   RuleInitial,
-  parsimmon.regex(/\s*;\s*/),
+  RulePartSeparator,
   Rule.atLeast(1),
 
   function (initial, _, rules) {
