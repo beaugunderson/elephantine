@@ -27,7 +27,6 @@
     "onecolor": "^2.5.0",
     "parsimmon": "^0.7.0",
     "random-seed": "^0.3.0",
-    "require-directory": "^2.1.1",
     "uuid": "^2.0.1"
   },
   "devDependencies": {
