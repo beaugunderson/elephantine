@@ -9,5 +9,7 @@ var defaults = exports.defaults = {
 };
 
 exports.apply = function applyAngleChaos(state, angleChaos) {
-  state.angleChaos = angleChaos || defaults.angleChaos;
+  state.angleChaos = typeof angleChaos === 'number'
+    ? angleChaos
+    : defaults.angleChaos;
 };

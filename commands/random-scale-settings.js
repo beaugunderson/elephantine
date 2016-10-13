@@ -2,7 +2,7 @@
 
 var scales = require('../lib/scales.js');
 
-exports.arguments = [`1-${scales.SCALES.length}`];
+exports.arguments = [`1-${scales.INTERPOLATORS.length}`];
 exports.symbols = ['🌈'];
 exports.tags = ['setting'];
 

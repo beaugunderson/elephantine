@@ -9,5 +9,7 @@ var defaults = exports.defaults = {
 };
 
 exports.apply = function applyDistanceChaos(state, distanceChaos) {
-  state.distanceChaos = distanceChaos || defaults.distanceChaos;
+  state.distanceChaos = typeof distanceChaos === 'number'
+    ? distanceChaos
+    : defaults.distanceChaos;
 };

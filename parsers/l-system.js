@@ -59,7 +59,7 @@ var Arguments = parsimmon.seq(
 }).desc('one or more arguments');
 
 var CommandSymbol = parsimmon.alt(
-  parsimmon.regex(/[a-z!@%^&*_+()\[\]\{\}\<\>α-]/i),
+  parsimmon.regex(/[a-z!@%^&*_+\[\]\{\}\<\>α-]/i),
   emoji.Emoji
 ).desc('a command symbol');
 
@@ -73,6 +73,31 @@ var Command = parsimmon.seq(
   };
 }).desc('a command');
 
+var SettingCommand = parsimmon.seq(
+  CommandSymbol.skip(parsimmon.string('=')),
+  Arguments
+).map(function (result) {
+  return {
+    setting: result[0],
+    args: result[1]
+  };
+}).desc('a command');
+
+var ProbabilityItem = parsimmon.seq(
+  Command.skip(parsimmon.string(':')),
+  NumberSymbol
+).desc('a command symbol and a number');
+
+var ProbabilityList = exports.ProbabilityList = parsimmon.seq(
+  parsimmon.string('Ƥ('),
+  ProbabilityItem.skip(parsimmon.string(',').atMost(1)).atLeast(1),
+  parsimmon.string(')')
+).map(function (result) {
+  return {
+    probabilities: result[1],
+  };
+}).desc('a list of probabilities');
+
 var RulePartSeparator = parsimmon.alt(
   lexeme(parsimmon.string(';\n')),
   lexeme(parsimmon.string(';')),
@@ -83,18 +108,19 @@ var RulePartSeparator = parsimmon.alt(
 var RuleInitial = Command.atLeast(1);
 
 var Rule = parsimmon.seqMap(
-  CommandSymbol,
-  parsimmon.string('='),
+  CommandSymbol.skip(parsimmon.string('=')),
   parsimmon.alt(
-    Command.atLeast(1),
-    Argument.atLeast(1)
-  ),
+    ProbabilityList,
+    SettingCommand,
+    Command,
+    Argument
+  ).atLeast(1),
   RulePartSeparator.times(1),
 
-  function (commandSymbol, _, commandsOrArguments) {
+  function (commandSymbol, ruleSegments) {
     var rule = {};
 
-    rule[commandSymbol] = commandsOrArguments;
+    rule[commandSymbol] = ruleSegments;
 
     return rule;
   }
@@ -108,11 +134,10 @@ var RuleBody = exports.RuleBody = Command.atLeast(0).map(function (commands) {
 });
 
 var Curve = exports.Curve = parsimmon.seqMap(
-  RuleInitial,
-  RulePartSeparator,
+  RuleInitial.skip(RulePartSeparator),
   Rule.atLeast(1),
 
-  function (initial, _, rules) {
+  function (initial, rules) {
     var merged = {};
 
     rules.forEach(function (rule) {
@@ -130,7 +155,8 @@ function parseResultToError(string, result) {
   var errorString = [
     'Error parsing string:',
     string,
-    _.padLeft(`^ expected: ${result.expected.join(', ')}`, result.index)
+    _.repeat(' ', result.index.offset) +
+      `^ expected: ${result.expected.join(', ')}`.replace(/\n/g, '\\n'),
   ].join('\n');
 
   return new Error(errorString);
