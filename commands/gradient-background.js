@@ -1,6 +1,8 @@
 'use strict';
 
 var palette = [
+  ['#ffffff', '#ffffff'],
+  ['#000000', '#000000'],
   ['#ff0dff', '#e80c7a'],
   ['#94eed5', '#f3fee2'],
   ['#fee69c', '#96f3f8'],

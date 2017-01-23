@@ -3,6 +3,7 @@
 var color = require('onecolor');
 
 var palette = exports.palette = [
+  '#ffffff', '#000000',
   '#ff0dff', '#e80c7a',
   '#94eed5', '#f3fee2',
   '#fee69c', '#96f3f8',
@@ -28,5 +29,7 @@ exports.draw = function drawStrokeStyle(state, previousState, globals, ctx, inde
 
   state.strokeColor = c;
 
-  ctx.strokeStyle = color(c).alpha(state.strokeOpacity).cssa();
+  ctx.strokeStyle = color(c)
+    .alpha(state.strokeOpacity)
+    .cssa();
 };
