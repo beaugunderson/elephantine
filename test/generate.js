@@ -11,6 +11,6 @@ test('generate some systems without dying', t => {
   _.times(50, function () {
     var output = generate();
 
-    t.ok(output.length > 0);
+    t.truthy(output.length > 0);
   });
 });
